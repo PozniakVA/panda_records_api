@@ -12,16 +12,13 @@ AuthUser = TypeVar("AuthUser", AbstractBaseUser, TokenUser)
 class CustomJWTAuthentication(JWTAuthentication):
     def authenticate(self, request: Request) -> Optional[Tuple[AuthUser, Token]]:
 
-        raw_token = request.COOKIES.get("access_token")
+        header = self.get_header(request)
+        if header is None:
+            return None
+
+        raw_token = self.get_raw_token(header)
         if raw_token is None:
-
-            header = self.get_header(request)
-            if header is None:
-                return None
-
-            raw_token = self.get_raw_token(header)
-            if raw_token is None:
-                return None
+            return None
 
         validated_token = self.get_validated_token(raw_token)
 

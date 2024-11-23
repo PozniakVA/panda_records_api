@@ -20,16 +20,7 @@ class CustomTokenViewBase(TokenViewBase):
         access_token = tokens.get("access")
         refresh_token = tokens.get("refresh")
 
-        response = Response(status=status.HTTP_200_OK)
-
-        if access_token:
-            response.set_cookie(
-                key="access_token",
-                value=access_token,
-                httponly=True,
-                secure=True,
-                samesite="Lax",
-            )
+        response = Response({"access": access_token}, status=status.HTTP_200_OK)
 
         if refresh_token:
             response.set_cookie(
