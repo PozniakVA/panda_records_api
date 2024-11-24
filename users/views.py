@@ -1,13 +1,14 @@
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework_simplejwt.settings import api_settings
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenViewBase
 
 
-class CustomTokenViewBase(TokenViewBase):
+class CustomTokenViewBaseForAccess(TokenViewBase):
     def post(self, request: Request, *args, **kwargs) -> Response:
         serializer = self.get_serializer(data=request.data)
 
@@ -34,7 +35,7 @@ class CustomTokenViewBase(TokenViewBase):
         return response
 
 
-class CustomTokenObtainPairView(CustomTokenViewBase):
+class CustomTokenObtainPairView(CustomTokenViewBaseForAccess):
     """
     Takes a set of user credentials and returns an access and refresh JSON web
     token pair to prove the authentication of those credentials.
@@ -43,33 +44,21 @@ class CustomTokenObtainPairView(CustomTokenViewBase):
     _serializer_class = api_settings.TOKEN_OBTAIN_SERIALIZER
 
 
-class CustomTokenRefreshView(CustomTokenViewBase):
-    """
-    Takes a refresh type JSON web token and returns an access type JSON web
-    token if the refresh token is valid.
-    """
+class CustomTokenViewBaseForRefresh(generics.GenericAPIView):
+    def get(self, request: Request, *args, **kwargs) -> Response:
 
-    _serializer_class = api_settings.TOKEN_REFRESH_SERIALIZER
+        refresh_token = request.COOKIES.get("refresh_token")
+        if not refresh_token:
+            return Response(
+                {"error": "You do not have a refresh token"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
+        try:
+            token = RefreshToken(refresh_token)
+        except TokenError as e:
+            raise InvalidToken({"error": f"Invalid refresh token: {e}"})
 
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
+        access_token = str(token.access_token)
 
-@api_view(['GET'])
-@permission_classes([IsAdminUser])
-def simple_endpoint_with_authentication(request):
-    """
-    A simple endpoint that returns a JSON response.
-    Only accessible to admin users.
-    """
-    return Response({"message": "Hello, this is a simple endpoint with authentication!"})
-
-
-@api_view(['GET'])
-
-def simple_endpoint_without_authentication(request):
-    """
-    A simple endpoint that returns a JSON response.
-    Only accessible to admin users.
-    """
-    return Response({"message": "Hello, this is a simple endpoint without authentication!"})
+        return Response({"access": access_token}, status=status.HTTP_200_OK)
