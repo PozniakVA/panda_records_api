@@ -1,5 +1,4 @@
 from rest_framework import status, generics
-from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
@@ -21,7 +20,7 @@ class CustomTokenViewBaseForAccess(TokenViewBase):
         access_token = tokens.get("access")
         refresh_token = tokens.get("refresh")
 
-        response = Response({"access": access_token}, status=status.HTTP_200_OK)
+        response = Response({"access_token": access_token}, status=status.HTTP_200_OK)
 
         if refresh_token:
             response.set_cookie(
@@ -61,4 +60,7 @@ class CustomTokenViewBaseForRefresh(generics.GenericAPIView):
 
         access_token = str(token.access_token)
 
-        return Response({"access": access_token}, status=status.HTTP_200_OK)
+        response = Response({"access_token": access_token}, status=status.HTTP_200_OK)
+        response["Access-Control-Allow-Credentials"] = "true"
+
+        return response
