@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 
+from panda_records_api.permissions import IsAdminUserOrReadOnly
 from songs.models import Song
-from songs.permissions import IsAdminUserOrReadOnly
 from songs.serializer import SongSerializer
 
 
