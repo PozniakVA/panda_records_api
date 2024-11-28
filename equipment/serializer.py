@@ -9,7 +9,6 @@ class EquipmentSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
-            "type",
-            "model_name",
+            "model",
             "image"
         ]

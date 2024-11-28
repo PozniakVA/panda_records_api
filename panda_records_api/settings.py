@@ -33,13 +33,14 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
+    "47f7-185-110-133-10.ngrok-free.app"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3001",
-    "http://127.0.0.1:3001",
+    "http://localhost:3000",
+    "https://47f7-185-110-133-10.ngrok-free.app"
 ]
 
 # Application definition

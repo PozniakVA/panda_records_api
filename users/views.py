@@ -7,6 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenViewBase
 
 
+
 class CustomTokenViewBaseForAccess(TokenViewBase):
     def post(self, request: Request, *args, **kwargs) -> Response:
         serializer = self.get_serializer(data=request.data)
@@ -28,7 +29,7 @@ class CustomTokenViewBaseForAccess(TokenViewBase):
                 value=refresh_token,
                 httponly=True,
                 secure=True,
-                samesite="Lax",
+                samesite="None",
             )
 
         return response
@@ -60,7 +61,4 @@ class CustomTokenViewBaseForRefresh(generics.GenericAPIView):
 
         access_token = str(token.access_token)
 
-        response = Response({"access_token": access_token}, status=status.HTTP_200_OK)
-        response["Access-Control-Allow-Credentials"] = "true"
-
-        return response
+        return Response({"access_token": access_token}, status=status.HTTP_200_OK)

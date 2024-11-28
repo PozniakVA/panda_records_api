@@ -15,9 +15,8 @@ def image_path(instance, filename):
 
 class Equipment(models.Model):
     name = models.CharField(max_length=100)
-    type = models.CharField(max_length=100, blank=True)
-    model_name = models.CharField(max_length=200, blank=True)
+    model = models.CharField(max_length=200, blank=True)
     image = models.ImageField(upload_to=image_path, null=True, blank=True)
 
     def __str__(self) -> str:
-        return self.model_name
+        return self.model
