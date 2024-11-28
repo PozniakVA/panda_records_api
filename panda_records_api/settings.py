@@ -43,7 +43,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
     os.getenv("FRONTED_URL"),
-    "http://localhost:3001",
+    "http://localhost:3000",
 ]
 
 # Application definition
@@ -57,10 +57,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework_simplejwt",
+    "corsheaders",
     "users",
     "songs",
     "equipment",
-    "corsheaders",
+    "lessons",
 ]
 
 MIDDLEWARE = [
