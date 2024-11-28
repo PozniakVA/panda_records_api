@@ -11,16 +11,5 @@ class EquipmentSerializer(serializers.ModelSerializer):
             "name",
             "type",
             "model_name",
-            "rental_price",
-            "description"
-        ]
-
-class EquipmentListSerializer(EquipmentSerializer):
-    class Meta:
-        model = Equipment
-        fields = [
-            "name",
-            "type",
-            "model_name",
-            "rental_price",
+            "image"
         ]
