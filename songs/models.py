@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.text import slugify
 
 
-def audio_path(instance, filename):
+def image_path(instance, filename):
     filename = (
         f"{slugify(instance.title)}-{uuid.uuid4()}"
         + pathlib.Path(filename).suffix
@@ -12,7 +12,7 @@ def audio_path(instance, filename):
 
     return pathlib.Path("songs/images/") / filename
 
-def image_path(instance, filename):
+def audio_path(instance, filename):
     filename = (
         f"{slugify(instance.title)}-{uuid.uuid4()}"
         + pathlib.Path(filename).suffix
