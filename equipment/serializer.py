@@ -10,5 +10,5 @@ class EquipmentSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "model",
-            "image"
+            "photo"
         ]

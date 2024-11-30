@@ -7,12 +7,12 @@ from django.db import models
 from django.utils.text import slugify
 
 
-def image_path(instance, filename):
+def photo_path(instance, filename):
     filename = (
         f"{slugify(instance.title)}-{uuid.uuid4()}"
         + pathlib.Path(filename).suffix
     )
-    return f"songs/images/{filename}"
+    return f"songs/photos/{filename}"
 
 def audio_path(instance, filename):
     filename = (
@@ -27,8 +27,8 @@ class Song(models.Model):
     title = models.CharField(max_length=100)
     artist = models.CharField(max_length=100)
     audio_file = models.FileField(upload_to=audio_path)
-    image = models.ImageField(
-        upload_to=image_path,
+    photo = models.ImageField(
+        upload_to=photo_path,
         storage=MediaCloudinaryStorage(),
         null=True, blank=True)
 
