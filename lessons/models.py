@@ -1,6 +1,7 @@
 import pathlib
 import uuid
 
+from cloudinary_storage.storage import VideoMediaCloudinaryStorage
 from django.db import models
 from django.utils.text import slugify
 
@@ -11,13 +12,16 @@ def video_path(instance, filename):
         + pathlib.Path(filename).suffix
     )
 
-    return pathlib.Path("lessons/videos/") / filename
+    return f"lessons/videos/{filename}"
 
 class Lesson(models.Model):
     title = models.CharField(max_length=100)
     description_block1 = models.TextField(blank=True, null=True)
     description_block2 = models.TextField(blank=True, null=True)
-    video_file = models.FileField(upload_to="video_path")
+    video_file = models.FileField(
+        upload_to=video_path,
+        storage=VideoMediaCloudinaryStorage()
+    )
 
     def __str__(self) -> str:
         return self.title
