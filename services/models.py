@@ -8,25 +8,21 @@ from django.utils.text import slugify
 
 def photo_path(instance, filename):
     filename = (
-        f"{slugify(instance.name)}-{uuid.uuid4()}"
+        f"{slugify(instance.title)}-{uuid.uuid4()}"
         + pathlib.Path(filename).suffix
     )
+    return f"services/photos/{filename}"
 
-    return pathlib.Path("equipment/photos/") / filename
-
-class Equipment(models.Model):
-    name = models.CharField(max_length=100)
-    model = models.CharField(
-        max_length=200,
-        blank=True,
-        null=True,
-    )
+class Service(models.Model):
+    title = models.CharField(max_length=255)
+    details_block1 = models.TextField(blank=True, null=True)
+    details_block2 = models.TextField(blank=True, null=True)
     photo = models.ImageField(
-        storage=MediaCloudinaryStorage(),
         upload_to=photo_path,
-        null=True,
+        storage=MediaCloudinaryStorage(),
         blank=True,
+        null=True
     )
 
     def __str__(self) -> str:
-        return self.model
+        return self.title
