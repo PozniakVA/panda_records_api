@@ -9,4 +9,5 @@ urlpatterns = [
     path("api/", include("equipment.urls"), name="equipment"),
     path("api/", include("lessons.urls"), name="lessons"),
     path("api/", include("services.urls"), name="services"),
+    path("api/", include("notifications.urls"), name="notifications"),
 ]

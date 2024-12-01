@@ -11,3 +11,18 @@ class IsAdminUserOrReadOnly(BasePermission):
             request.method in SAFE_METHODS or
             request.user.is_staff
         )
+
+
+class IsAdminUserOrCreateOnly(BasePermission):
+    """"
+    Requires admin or only allowed to create
+    """
+
+    def has_permission(self, request, view):
+        if request.method == "POST":
+            return True
+
+        if request.method in SAFE_METHODS or request.method == "DELETE":
+            return request.user.is_staff
+
+        return False
