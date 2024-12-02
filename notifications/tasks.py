@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth import get_user_model
 
 from notifications.bot import bot
@@ -29,5 +31,26 @@ def connect_telegram_user_with_user_from_db(message):
             """
 If you have issues receiving messages, please re-enter the bot
 using the link
+"""
+        )
+
+def send_notification_to_admin_about_client(notification):
+    chats = Chat.objects.filter(user__is_staff=True, chat_id__isnull=False)
+
+    created_at = datetime.fromisoformat(notification["created_at"])
+    formatted_date = created_at.strftime("%d %B %Y, %H:%M")
+
+    for chat in chats:
+        bot.send_message(
+            chat.chat_id,
+            f"""
+id: {notification["id"]}
+A client wants to contact the administration!
+Client's name: {notification["name"]}
+Email: {notification["email"]}
+Phone number: {notification["phone_number"]}
+Time of request: {formatted_date}
+Message:
+{notification["message"]}
 """
         )
