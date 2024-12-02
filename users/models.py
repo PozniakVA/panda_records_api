@@ -1,3 +1,5 @@
+from secrets import token_urlsafe
+
 from django.apps import apps
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser, UserManager as DjangoUserManager
@@ -47,8 +49,25 @@ class UserManager(DjangoUserManager):
 class User(AbstractUser):
     username = None
     email = models.EmailField(_("email address"), unique=True)
+    token = models.CharField(max_length=20, unique=True, editable=False)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     objects = UserManager()
+
+    def your_telegram_bot(self):
+        telegram_url = "https://www.telegram.me"
+        bot_name = "PandaRecordsBot"
+        return f"{telegram_url}/{bot_name}?start={self.token}"
+
+    def save(self, *args, **kwargs):
+        if not self.pk or not self.token:
+            self.token = self.generate_unique_token()
+        super().save(*args, **kwargs)
+
+    def generate_unique_token(self) -> str:
+        while True:
+            token = token_urlsafe(10)
+            if not User.objects.filter(token=token).exists():
+                return token
