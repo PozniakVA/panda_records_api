@@ -14,8 +14,8 @@ Hello! I’m PandaRecordsBot, your assistant.
 I’ll notify you every time users want to get in touch with you 
 about PandaRecords services.
 
-If you don’t want to receive notifications, use the command 
-/stop
+If you want to view and understand all the commands, use:
+/all_commands
         """
     )
 
@@ -35,7 +35,11 @@ using the link
         )
 
 def send_notification_to_admin_about_client(notification):
-    chats = Chat.objects.filter(user__is_staff=True, chat_id__isnull=False)
+    chats = Chat.objects.filter(
+        user__is_staff=True,
+        chat_id__isnull=False,
+        chat__notify_allowed=True,
+    )
 
     created_at = datetime.fromisoformat(notification["created_at"])
     formatted_date = created_at.strftime("%d %B %Y, %H:%M")
@@ -54,3 +58,39 @@ Message:
 {notification["message"]}
 """
         )
+
+def stop_notifications(message):
+    chat = Chat.objects.get(chat_id=message.chat.id)
+    chat.notify_allowed = True
+
+    bot.send_message(
+        message.chat.id,
+        """
+Now you will not receive notifications about customers who want to contact PandaRecords. 
+If you want to receive notifications, use the command /start_notifications
+        """
+    )
+
+def start_notifications(message):
+    chat = Chat.objects.get(chat_id=message.chat.id)
+    chat.notify_allowed = False
+
+    bot.send_message(
+        message.chat.id,
+        """
+Now you will start receiving notifications about customers who want to contact PandaRecords.
+If you want to stop receiving notifications, use the command /stop_notifications
+        """
+    )
+
+def show_all_commands(message):
+    bot.send_message(
+        message.chat.id,
+        """
+/all_commands, /help — lists all commands with explanations.
+/stop_notifications — stops notifications.
+/start_notifications — resumes notifications.
+/start — starts interaction with the bot.
+        """
+    )
+

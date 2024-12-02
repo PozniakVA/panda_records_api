@@ -21,6 +21,7 @@ class Chat(models.Model):
         related_name="chats",
     )
     chat_id = models.IntegerField(null=True)
+    notify_allowed = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return self.user.email
