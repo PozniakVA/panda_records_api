@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from notifications.models import Notification
-from notifications.serializer import NotificationSerializer
+from notifications.serializer import NotificationSerializer, NotificationCreateSerializer
 from notifications.tasks import send_notification_to_admin_about_client
 from panda_records_api.permissions import IsAdminUserOrCreateOnly
 
@@ -17,7 +17,11 @@ class NotificationView(
 ):
     queryset = Notification.objects.all()
     permission_classes = [IsAdminUserOrCreateOnly]
-    serializer_class = NotificationSerializer
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return NotificationCreateSerializer
+        return NotificationSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

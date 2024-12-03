@@ -38,7 +38,7 @@ def send_notification_to_admin_about_client(notification):
     chats = Chat.objects.filter(
         user__is_staff=True,
         chat_id__isnull=False,
-        chat__notify_allowed=True,
+        notify_allowed=True,
     )
 
     created_at = datetime.fromisoformat(notification["created_at"])
@@ -49,6 +49,7 @@ def send_notification_to_admin_about_client(notification):
             chat.chat_id,
             f"""
 id: {notification["id"]}
+status: {notification["status"]}
 A client wants to contact the administration!
 Client's name: {notification["name"]}
 Email: {notification["email"]}
