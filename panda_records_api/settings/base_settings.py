@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "lessons",
     "services",
     "notifications",
+    "django_q",
 ]
 
 MIDDLEWARE = [
@@ -154,4 +155,20 @@ CLOUDINARY_STORAGE = {
     "CLOUD_NAME": os.getenv("CLOUD_NAME"),
     "API_KEY": os.getenv("API_KEY"),
     "API_SECRET": os.getenv("API_SECRET"),
+}
+
+Q_CLUSTER = {
+    "name": "django_q_django",
+    "recycle": 500,
+    "timeout": 60,
+    "compress": True,
+    "save_limit": 250,
+    "queue_limit": 500,
+    "cpu_affinity": 1,
+    "label": "Django Q",
+    "redis": {
+        "host": os.getenv("REDIS_HOST"),
+        "port": os.getenv("REDIS_PORT"),
+        "password": os.getenv("REDIS_PASSWORD"),
+    }
 }

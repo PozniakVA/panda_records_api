@@ -1,3 +1,4 @@
+from django_q.tasks import async_task
 from rest_framework import mixins, status
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -28,5 +29,8 @@ class NotificationView(
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        send_notification_to_admin_about_client(serializer.data)
+        async_task(
+            "notifications.tasks.send_notification_to_admin_about_client",
+            serializer.data
+        )
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

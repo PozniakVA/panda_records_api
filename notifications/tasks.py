@@ -67,7 +67,7 @@ def stop_notifications(message):
     bot.send_message(
         message.chat.id,
         """
-Now you will not receive notifications about customers who want to contact PandaRecords. 
+Now you will not receive notifications about customers who want to contact PandaRecords.
 If you want to receive notifications, use the command /start_notifications
         """
     )
