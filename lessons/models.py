@@ -20,7 +20,8 @@ class Lesson(models.Model):
     description_block2 = models.TextField(blank=True, null=True)
     video_file = models.FileField(
         upload_to=video_path,
-        storage=VideoMediaCloudinaryStorage()
+        storage=VideoMediaCloudinaryStorage(),
+        max_length = 1000
     )
 
     def __str__(self) -> str:

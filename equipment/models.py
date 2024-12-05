@@ -26,6 +26,7 @@ class Equipment(models.Model):
         upload_to=photo_path,
         null=True,
         blank=True,
+        max_length=1000
     )
 
     def __str__(self) -> str:

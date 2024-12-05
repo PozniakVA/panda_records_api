@@ -14,14 +14,15 @@ def photo_path(instance, filename):
     return f"services/photos/{filename}"
 
 class Service(models.Model):
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=250)
     details_block1 = models.TextField(blank=True, null=True)
     details_block2 = models.TextField(blank=True, null=True)
     photo = models.ImageField(
         upload_to=photo_path,
         storage=MediaCloudinaryStorage(),
         blank=True,
-        null=True
+        null=True,
+        max_length=1000,
     )
 
     def __str__(self) -> str:

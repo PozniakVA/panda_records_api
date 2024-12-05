@@ -5,7 +5,6 @@ from rest_framework.viewsets import GenericViewSet
 
 from notifications.models import Notification
 from notifications.serializer import NotificationSerializer, NotificationCreateSerializer
-from notifications.tasks import send_notification_to_admin_about_client
 from panda_records_api.permissions import IsAdminUserOrCreateOnly
 
 

@@ -26,11 +26,17 @@ def audio_path(instance, filename):
 class Song(models.Model):
     title = models.CharField(max_length=100)
     artist = models.CharField(max_length=100)
-    audio_file = models.FileField(upload_to=audio_path)
+    audio_file = models.FileField(
+        upload_to=audio_path,
+        max_length=1000
+    )
     photo = models.ImageField(
         upload_to=photo_path,
         storage=MediaCloudinaryStorage(),
-        null=True, blank=True)
+        max_length=1000,
+        null=True,
+        blank=True,
+    )
 
     def __str__(self) -> str:
         return self.title
