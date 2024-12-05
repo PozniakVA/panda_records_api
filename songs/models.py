@@ -37,6 +37,7 @@ class Song(models.Model):
         null=True,
         blank=True,
     )
+    top = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.title
