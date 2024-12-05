@@ -11,6 +11,6 @@ python manage.py collectstatic --no-input
 # Apply any outstanding database migrations
 python manage.py migrate
 
-python manage.py qcluster &
+python manage.py qcluster > qcluster.log 2>&1 &
 
-python manage.py launch_telegram_bot &
+python manage.py launch_telegram_bot > telegram_bot.log 2>&1 &
