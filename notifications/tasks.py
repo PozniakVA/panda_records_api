@@ -10,9 +10,8 @@ def send_welcome_message(message):
     bot.send_message(
         message.chat.id,
         """
-Hello! I’m PandaRecordsBot, your assistant. 
-I’ll notify you every time users want to get in touch with you 
-about PandaRecords services.
+👋 Hello! I’m PandaRecordsBot, your assistant.
+I’ll notify you every time users want to get in touch with you about PandaRecords services
 
 If you want to view and understand all the commands, use:
 /all_commands
@@ -29,8 +28,7 @@ def connect_telegram_user_with_user_from_db(message):
         bot.send_message(
             message.chat.id,
             """
-If you have issues receiving messages, please re-enter the bot
-using the link
+⚠️ If you have issues receiving messages, please re-enter the bot using the link on the admin page
 """
         )
 
@@ -48,14 +46,18 @@ def send_notification_to_admin_about_client(notification):
         bot.send_message(
             chat.chat_id,
             f"""
-id: {notification["id"]}
-status: {notification["status"]}
-A client wants to contact the administration!
-Client's name: {notification["name"]}
-Email: {notification["email"]}
-Phone number: {notification["phone_number"]}
-Time of request: {formatted_date}
-Message:
+🔔 New Notification!
+ID: {notification["id"]}
+Status: {notification["status"]}
+
+📢 A client wants to contact the administration!
+
+👤 Client's Name: {notification["name"]}
+📧 Email: {notification["email"]}
+📞 Phone Number: {notification["phone_number"]}
+🕒 Time of Request: {formatted_date}
+
+💬 Message:
 {notification["message"]}
 """
         )
@@ -67,8 +69,12 @@ def stop_notifications(message):
     bot.send_message(
         message.chat.id,
         """
+🔕 Notifications Disabled
 Now you will not receive notifications about customers who want to contact PandaRecords.
-If you want to receive notifications, use the command /start_notifications
+
+🔔 Enable Notifications
+If you want to start receiving notifications again, use the command:
+/start_notifications
         """
     )
 
@@ -79,8 +85,12 @@ def start_notifications(message):
     bot.send_message(
         message.chat.id,
         """
+🔔 Notifications Activated!
 Now you will start receiving notifications about customers who want to contact PandaRecords.
-If you want to stop receiving notifications, use the command /stop_notifications
+
+🚫 Stop Notifications
+If you no longer wish to receive notifications, simply use the command:
+/stop_notifications
         """
     )
 
@@ -88,10 +98,17 @@ def show_all_commands(message):
     bot.send_message(
         message.chat.id,
         """
-/all_commands, /help — lists all commands with explanations.
-/stop_notifications — stops notifications.
-/start_notifications — resumes notifications.
-/start — starts interaction with the bot.
+🎨 /all_commands, /help
+📝 View all commands and their explanations
+
+🔕 /stop_notifications
+⛔ Disable notifications
+
+🔔 /start_notifications
+🔄 Enable notifications
+
+🚀 /start
+🎉 Start interacting with the bot
         """
     )
 
