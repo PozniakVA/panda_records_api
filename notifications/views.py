@@ -28,8 +28,12 @@ class NotificationView(
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
+
         async_task(
             "notifications.tasks.send_notification_to_admin_about_client",
-            serializer.data
+            {
+                **serializer.data,
+                "status": Notification.NotificationStatus.NOT_STARTED.label
+            }
         )
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
