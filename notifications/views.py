@@ -33,7 +33,7 @@ class NotificationView(
             "notifications.tasks.send_notification_to_admin_about_client",
             {
                 **serializer.data,
-                "status": Notification.NotificationStatus.NOT_STARTED.label
+                "status": Notification.NotificationStatus.PENDING.label
             }
         )
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

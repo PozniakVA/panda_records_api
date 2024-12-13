@@ -5,14 +5,14 @@ from users.models import User
 
 class Notification(models.Model):
     class NotificationStatus(models.TextChoices):
-        NOT_STARTED = "not_started", "Not Started"
-        IN_PROGRESS = "in_progress", "In Progress"
+        PENDING = "pending", "Pending"
+        PROCESSING = "processing", "Processing"
         COMPLETED = "completed", "Completed"
 
     status = models.CharField(
         max_length=20,
         choices=NotificationStatus.choices,
-        default=NotificationStatus.NOT_STARTED,
+        default=NotificationStatus.PENDING,
     )
     name = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
