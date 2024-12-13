@@ -1,24 +1,31 @@
+import os
 from datetime import datetime
 
 from django.contrib.auth import get_user_model
+from telebot import types
 
 from notifications.bot import bot
-from notifications.models import Chat
+from notifications.models import Chat, Notification
 
 
 def send_welcome_message(message):
     bot.send_message(
         message.chat.id,
         """
-👋 Hello! I’m PandaRecordsBot, your assistant.
-I’ll notify you every time users want to get in touch with you about PandaRecords services
+👋 Привіт! 👋
+Я 𝗣𝗮𝗻𝗱𝗮𝗥𝗲𝗰𝗼𝗿𝗱𝘀𝗕𝗼𝘁, ваш помічник.
+Я повідомлятиму вас щоразу, коли користувачі захочуть зв’язатися з вами щодо послуг PandaRecords.
 
-If you want to view and understand all the commands, use:
-/all_commands
+Якщо хочете переглянути та зрозуміти всі команди, використайте:
+➪ /all_commands
         """
     )
 
 def connect_telegram_user_with_user_from_db(message):
+
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton("Сторінка адміністратора", url=f"https://{os.getenv("DOMAIN")}/api/admin/"))
+
     text = message.text.split()
     if len(text) > 1:
         token = message.text.split()[1]
@@ -28,11 +35,16 @@ def connect_telegram_user_with_user_from_db(message):
         bot.send_message(
             message.chat.id,
             """
-⚠️ If you have issues receiving messages, please re-enter the bot using the link on the admin page
-"""
+⚠️ Якщо у вас виникли проблеми з отриманням повідомлень, будь ласка, повторно увійдіть до бота, скориставшись посиланням, доступним на сторінці адміністратора
+""", reply_markup=markup
         )
 
 def send_notification_to_admin_about_client(notification):
+
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton("Позначити як виконане", callback_data="done"))
+    markup.add(types.InlineKeyboardButton("Позначити як в процесі", callback_data="in_process" ))
+
     chats = Chat.objects.filter(
         user__is_staff=True,
         chat_id__isnull=False,
@@ -42,24 +54,31 @@ def send_notification_to_admin_about_client(notification):
     created_at = datetime.fromisoformat(notification["created_at"])
     formatted_date = created_at.strftime("%d %B %Y, %H:%M")
 
+    if notification["status"] == Notification.NotificationStatus.PENDING.label:
+        title = "🔔 Нове сповіщення! 🔔"
+    elif notification["status"] == Notification.NotificationStatus.PROCESSING.label:
+        title = "🔄 В процесі обробки 🔄"
+    else:
+        title = "✅ Виконано ✅"
+
     for chat in chats:
         bot.send_message(
             chat.chat_id,
             f"""
-🔔 New Notification!
+{title}
+
 ID: {notification["id"]}
-Status: {notification["status"]}
+Статус: {notification["status"]}
 
-📢 A client wants to contact the administration!
+Ім'я клієнта ➪ {notification["name"]}
+Email ➪ {notification["email"]}
+Номер телефону ➪ {notification["phone_number"]}
 
-👤 Client's Name: {notification["name"]}
-📧 Email: {notification["email"]}
-📞 Phone Number: {notification["phone_number"]}
-🕒 Time of Request: {formatted_date}
+Час запиту ➪ {formatted_date}
 
-💬 Message:
+⬇️ Повідомлення ⬇️
 {notification["message"]}
-"""
+""", reply_markup=markup
         )
 
 def stop_notifications(message):
@@ -69,12 +88,12 @@ def stop_notifications(message):
     bot.send_message(
         message.chat.id,
         """
-🔕 Notifications Disabled
-Now you will not receive notifications about customers who want to contact PandaRecords.
+🔕 Повідомлення вимкнено 🔕
+Тепер ви не отримуватимете сповіщення про клієнтів, які хочуть зв’язатися з PandaRecords.
 
-🔔 Enable Notifications
-If you want to start receiving notifications again, use the command:
-/start_notifications
+🔔 Увімкнути повідомлення 🔔
+Якщо ви хочете знову отримувати сповіщення, скористайтеся командою:
+➪ /start_notifications
         """
     )
 
@@ -85,12 +104,12 @@ def start_notifications(message):
     bot.send_message(
         message.chat.id,
         """
-🔔 Notifications Activated!
-Now you will start receiving notifications about customers who want to contact PandaRecords.
+🔔 Повідомлення увімкнено 🔔
+Тепер ви почнете отримувати сповіщення від клієнтів, які бажають зв’язатися з PandaRecords.
 
-🚫 Stop Notifications
-If you no longer wish to receive notifications, simply use the command:
-/stop_notifications
+🔕 Зупинити повідомлення 🔕
+Якщо ви більше не хочете отримувати сповіщення, просто використайте команду:
+➪ /stop_notifications
         """
     )
 
@@ -98,17 +117,16 @@ def show_all_commands(message):
     bot.send_message(
         message.chat.id,
         """
-🎨 /all_commands, /help
-📝 View all commands and their explanations
+➪ /all_commands, /help
+📝 Переглянути всі команди та їх пояснення
 
-🔕 /stop_notifications
-⛔ Disable notifications
+➪ /stop_notifications
+⛔ Вимкнути сповіщення
 
-🔔 /start_notifications
-🔄 Enable notifications
+➪ /start_notifications
+🔄 Увімкнути сповіщення
 
-🚀 /start
-🎉 Start interacting with the bot
+➪ /start
+🚀 Почати взаємодію з ботом
         """
     )
-
