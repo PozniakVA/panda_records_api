@@ -14,13 +14,13 @@ def photo_path(instance, filename):
     )
     return f"songs/photos/{filename}"
 
+
 def audio_path(instance, filename):
     filename = (
         f"{slugify(instance.title)}-{uuid.uuid4()}"
         + pathlib.Path(filename).suffix
     )
     return f"songs/audio/{filename}"
-
 
 
 class Song(models.Model):

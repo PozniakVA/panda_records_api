@@ -137,7 +137,7 @@ def show_all_commands(message):
 def total_new_notifications(message):
     new_notifications = len(Notification.objects.filter(status=Notification.NotificationStatus.PENDING))
     processing_notifications = len(Notification.objects.filter(status=Notification.NotificationStatus.PROCESSING))
-    print(Notification.objects.filter(status=Notification.NotificationStatus.PROCESSING))
+
     bot.send_message(
         message.chat.id,
         f"""

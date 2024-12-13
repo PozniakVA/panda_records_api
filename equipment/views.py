@@ -9,4 +9,3 @@ class EquipmentViewSet(viewsets.ModelViewSet):
     queryset = Equipment.objects.all()
     permission_classes = [IsAdminUserOrReadOnly]
     serializer_class = EquipmentSerializer
-

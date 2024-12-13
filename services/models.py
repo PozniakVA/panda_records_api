@@ -13,6 +13,7 @@ def photo_path(instance, filename):
     )
     return f"services/photos/{filename}"
 
+
 class Service(models.Model):
     title = models.CharField(max_length=250)
     details_block1 = models.TextField(blank=True, null=True)

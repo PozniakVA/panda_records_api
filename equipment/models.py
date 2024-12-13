@@ -14,6 +14,7 @@ def photo_path(instance, filename):
 
     return pathlib.Path("equipment/photos/") / filename
 
+
 class Equipment(models.Model):
     name = models.CharField(max_length=100)
     model = models.CharField(

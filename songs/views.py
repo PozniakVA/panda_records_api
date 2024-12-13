@@ -1,5 +1,4 @@
-from rest_framework import viewsets, status
-from rest_framework.response import Response
+from rest_framework import viewsets
 
 from panda_records_api.permissions import IsAdminUserOrReadOnly
 from songs.models import Song
@@ -21,4 +20,3 @@ class SongViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(top=option[top.lower()])
 
         return queryset
-

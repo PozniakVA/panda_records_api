@@ -20,7 +20,10 @@ class CustomTokenViewBaseForAccess(TokenViewBase):
         access_token = tokens.get("access")
         refresh_token = tokens.get("refresh")
 
-        response = Response({"access_token": access_token}, status=status.HTTP_200_OK)
+        response = Response(
+            {"access_token": access_token},
+            status=status.HTTP_200_OK
+        )
 
         if refresh_token:
             response.set_cookie(
@@ -60,4 +63,7 @@ class CustomTokenViewBaseForRefresh(generics.GenericAPIView):
 
         access_token = str(token.access_token)
 
-        return Response({"access_token": access_token}, status=status.HTTP_200_OK)
+        return Response(
+            {"access_token": access_token},
+            status=status.HTTP_200_OK
+        )
