@@ -25,6 +25,10 @@ class Command(BaseCommand):
             elif message.text == "/start_notifications":
                 async_task("notifications.tasks.start_notifications", message)
 
+        @bot.message_handler(commands=["total_new_notifications"])
+        def call_total_new_tasks(message):
+            async_task("notifications.tasks.total_new_notifications", message)
+
         @bot.message_handler(commands=["all_commands", "help"])
         def call_show_all_commands(message):
             async_task("notifications.tasks.show_all_commands", message)
@@ -51,12 +55,14 @@ class Command(BaseCommand):
 
                 if call.data == "done":
                     notification.status = Notification.NotificationStatus.COMPLETED
+                    notification.save()
                     send_notification(notification, Notification.NotificationStatus.COMPLETED.label)
                     bot.delete_message(call.message.chat.id, call.message.id)
 
                 elif call.data == "in_process":
                     if notification_status != Notification.NotificationStatus.PROCESSING.label:
                         notification.status = Notification.NotificationStatus.PROCESSING
+                        notification.save()
                         send_notification(notification, Notification.NotificationStatus.PROCESSING.label)
                         bot.delete_message(call.message.chat.id, call.message.id)
                     else:

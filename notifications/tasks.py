@@ -117,16 +117,34 @@ def show_all_commands(message):
     bot.send_message(
         message.chat.id,
         """
-➪ /all_commands, /help
-📝 Переглянути всі команди та їх пояснення
+➪ /all_commands, /help  
+📝 Перегляд усіх команд із поясненнями  
 
-➪ /stop_notifications
-⛔ Вимкнути сповіщення
+➪ /total_new_notifications  
+📊 Показує кількість нових повідомлень та повідомлень, які обробляються  
 
-➪ /start_notifications
-🔄 Увімкнути сповіщення
+➪ /stop_notifications  
+⛔ Вимкнення сповіщень  
 
-➪ /start
-🚀 Почати взаємодію з ботом
-        """
+➪ /start_notifications  
+🔔 Увімкнення сповіщень  
+
+➪ /start  
+🚀 Початок роботи з ботом  
+"""
     )
+
+def total_new_notifications(message):
+    new_notifications = len(Notification.objects.filter(status=Notification.NotificationStatus.PENDING))
+    processing_notifications = len(Notification.objects.filter(status=Notification.NotificationStatus.PROCESSING))
+    print(Notification.objects.filter(status=Notification.NotificationStatus.PROCESSING))
+    bot.send_message(
+        message.chat.id,
+        f"""
+Кількість нових повідомлень ➪ 🆕  {new_notifications}  🆕
+
+Кількість повідомлень, які розглядаються ➪ 🔄  {processing_notifications}  🔄
+"""
+    )
+
+
