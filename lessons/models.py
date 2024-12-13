@@ -14,7 +14,6 @@ def video_path(instance, filename):
 
     return f"lessons/videos/{filename}"
 
-
 class Lesson(models.Model):
     title = models.CharField(max_length=100)
     description_block1 = models.TextField(blank=True, null=True)
@@ -22,7 +21,7 @@ class Lesson(models.Model):
     video_file = models.FileField(
         upload_to=video_path,
         storage=VideoMediaCloudinaryStorage(),
-        max_length=1000
+        max_length = 1000
     )
 
     def __str__(self) -> str:
