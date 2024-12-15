@@ -13,9 +13,12 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -23,6 +26,45 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
+
+ALLOWED_HOSTS = ["0.0.0.0"]
+
+PROJECT_MODE = os.getenv("PROJECT_MODE")
+if PROJECT_MODE == "develop":
+
+    DEBUG = True
+
+    ALLOWED_HOSTS.append("localhost")
+
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+
+elif PROJECT_MODE == "production":
+
+    DEBUG = False
+
+    DOMAIN = os.environ.get("DOMAIN")
+    if DOMAIN:
+        ALLOWED_HOSTS.append(DOMAIN)
+
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("POSTGRES_DB"),
+            "USER": os.getenv("POSTGRES_USER"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+            "HOST": os.getenv("POSTGRES_HOST"),
+            "PORT": os.getenv("POSTGRES_PORT"),
+        }
+    }
+
+else:
+    raise ValueError("PROJECT_MODE must be set to 'develop' or 'production'")
+
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -127,7 +169,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_ROOT = os.path.join(BASE_DIR, "../../staticfiles")
 
 MEDIA_URL = "/panda_records_api/media/"
 
