@@ -38,7 +38,7 @@ class EquipmentUnauthenticatedUserTestCase(TestCase):
 
     def test_unauthenticated_user_cannot_update_data(self) -> None:
 
-        """Test method POST"""
+        """Test method PUT"""
 
         response = self.client.put(
             reverse("equipment:equipment-detail", kwargs={"pk": self.equipment.id}),
@@ -49,7 +49,7 @@ class EquipmentUnauthenticatedUserTestCase(TestCase):
 
     def test_unauthenticated_user_cannot_delete_data(self) -> None:
 
-        """Test method POST"""
+        """Test method DELETE"""
 
         response = self.client.delete(
             reverse("equipment:equipment-detail", kwargs={"pk": self.equipment.id})
