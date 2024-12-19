@@ -12,9 +12,9 @@ def video_path(instance, filename):
         + pathlib.Path(filename).suffix
     )
 
-    return f"lessons/videos/{filename}"
+    return f"endpoint_video/videos/{filename}"
 
-class Lesson(models.Model):
+class Video(models.Model):
     title = models.CharField(max_length=100)
     description_block1 = models.TextField(blank=True, null=True)
     description_block2 = models.TextField(blank=True, null=True)

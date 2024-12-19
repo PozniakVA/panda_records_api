@@ -90,7 +90,7 @@ INSTALLED_APPS = [
     "users",
     "songs",
     "equipment",
-    "lessons",
+    "videos",
     "services",
     "notifications",
     "django_q",

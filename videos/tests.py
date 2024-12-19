@@ -4,17 +4,17 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
-from lessons.models import Lesson
-from lessons.serializer import LessonSerializer
+from videos.models import Video
+from videos.serializer import VideoSerializer
 
 
-class LessonUnauthenticatedUserTestCase(TestCase):
+class VideoUnauthenticatedUserTestCase(TestCase):
 
     def setUp(self) -> None:
         self.client = APIClient()
 
-        self.url_list = reverse("lessons:lesson-list")
-        self.lesson = Lesson.objects.create(title="Test Lesson")
+        self.url_list = reverse("videos:video-list")
+        self.video = Video.objects.create(title="Test Video")
 
     def test_unauthenticated_user_can_get_data(self) -> None:
 
@@ -23,7 +23,7 @@ class LessonUnauthenticatedUserTestCase(TestCase):
         response = self.client.get(self.url_list)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        serializer = LessonSerializer(self.lesson)
+        serializer = VideoSerializer(self.video)
         self.assertEqual(response.data, [serializer.data])
 
     def test_unauthenticated_user_cannot_create_data(self) -> None:
@@ -34,31 +34,31 @@ class LessonUnauthenticatedUserTestCase(TestCase):
 
         response = self.client.post(self.url_list, data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        self.assertFalse(Lesson.objects.filter(title=data["title"]).exists())
+        self.assertFalse(Video.objects.filter(title=data["title"]).exists())
 
     def test_unauthenticated_user_cannot_update_data(self) -> None:
 
         """Test method PUT"""
 
         response = self.client.put(
-            reverse("lessons:lesson-detail", kwargs={"pk": self.lesson.id}),
-            data={"title": "Updated Lesson"}
+            reverse("videos:video-detail", kwargs={"pk": self.video.id}),
+            data={"title": "Updated Video"}
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        self.assertEqual(Lesson.objects.get(id=self.lesson.id).title, "Test Lesson")
+        self.assertEqual(Video.objects.get(id=self.video.id).title, "Test Video")
 
     def test_unauthenticated_user_cannot_delete_data(self) -> None:
 
         """Test method DELETE"""
 
         response = self.client.delete(
-            reverse("lessons:lesson-detail", kwargs={"pk": self.lesson.id})
+            reverse("videos:video-detail", kwargs={"pk": self.video.id})
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        self.assertTrue(Lesson.objects.filter(id=self.lesson.id).exists())
+        self.assertTrue(Video.objects.filter(id=self.video.id).exists())
 
 
-class LessonEquipmentAdminTestCase(TestCase):
+class VideoEquipmentAdminTestCase(TestCase):
 
     def setUp(self) -> None:
 
@@ -70,20 +70,20 @@ class LessonEquipmentAdminTestCase(TestCase):
         )
         self.client.force_authenticate(user=self.user)
 
-        self.lesson = Lesson.objects.create(title="Test Lesson")
+        self.video = Video.objects.create(title="Test Video")
 
     def test_admin_can_create_data(self) -> None:
 
         """Test method POST"""
 
         response = self.client.post(
-            reverse("lessons:lesson-list"),
+            reverse("videos:video-list"),
             {"title": "Playing the guitar",}
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        lesson = Lesson.objects.get(id=response.data["id"])
-        serializer = LessonSerializer(lesson)
+        video = Video.objects.get(id=response.data["id"])
+        serializer = VideoSerializer(video)
         self.assertEqual(serializer.data, response.data)
 
     def test_admin_can_update_data(self) -> None:
@@ -91,18 +91,18 @@ class LessonEquipmentAdminTestCase(TestCase):
         """Test method PUT"""
 
         response = self.client.put(
-            reverse("lessons:lesson-detail", kwargs={"pk": self.lesson.id}),
-            data={"title": "Updated Lesson"}
+            reverse("videos:video-detail", kwargs={"pk": self.video.id}),
+            data={"title": "Updated Video"}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(Lesson.objects.filter(title="Updated Lesson").exists())
+        self.assertTrue(Video.objects.filter(title="Updated Video").exists())
 
     def test_admin_can_delete_data(self) -> None:
 
         """Test method DELETE"""
 
         response_delete = self.client.delete(
-            reverse("lessons:lesson-detail", kwargs={"pk": self.lesson.id})
+            reverse("videos:video-detail", kwargs={"pk": self.video.id})
         )
         self.assertEqual(response_delete.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertFalse(Lesson.objects.filter(id=self.lesson.id).exists())
+        self.assertFalse(Video.objects.filter(id=self.video.id).exists())

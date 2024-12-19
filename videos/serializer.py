@@ -1,11 +1,11 @@
 from rest_framework import serializers
 
-from lessons.models import Lesson
+from videos.models import Video
 
 
-class LessonSerializer(serializers.ModelSerializer):
+class VideoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Lesson
+        model = Video
         fields = [
             "id",
             "title",

@@ -1,8 +1,8 @@
 from modeltranslation.translator import register, TranslationOptions
 
-from lessons.models import Lesson
+from videos.models import Video
 
 
-@register(Lesson)
-class LessonTranslationOptions(TranslationOptions):
+@register(Video)
+class VideoTranslationOptions(TranslationOptions):
     fields = ("title", "description_block1", "description_block2")
