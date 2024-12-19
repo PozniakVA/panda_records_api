@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from rest_framework import status, generics
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -20,8 +21,11 @@ class CustomTokenViewBaseForAccess(TokenViewBase):
         access_token = tokens.get("access")
         refresh_token = tokens.get("refresh")
 
+        email = request.data["email"]
+        user = get_user_model().objects.get(email=email)
+
         response = Response(
-            {"access_token": access_token},
+            {"access_token": access_token, "telegram_bot": user.your_telegram_bot},
             status=status.HTTP_200_OK
         )
 

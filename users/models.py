@@ -59,6 +59,7 @@ class User(AbstractUser):
 
     objects = UserManager()
 
+    @property
     def your_telegram_bot(self):
         telegram_url = "https://www.telegram.me"
         bot_name = "PandaRecordsBot"
