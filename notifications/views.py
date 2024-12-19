@@ -18,6 +18,16 @@ class NotificationView(
     queryset = Notification.objects.all()
     permission_classes = [IsAdminUserOrCreateOnly]
 
+    def get_queryset(self):
+        queryset = self.queryset
+
+        status = self.request.query_params.get("status")
+        if status:
+            queryset = queryset.filter(status=status)
+
+        return queryset.order_by("-created_at")
+
+
     def get_serializer_class(self):
         if self.action == "create":
             return NotificationCreateSerializer

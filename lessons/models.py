@@ -21,7 +21,7 @@ class Lesson(models.Model):
     video_file = models.FileField(
         upload_to=video_path,
         storage=VideoMediaCloudinaryStorage(),
-        max_length = 1000,
+        max_length=1000,
         blank=True,
         null=True
     )
