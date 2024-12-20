@@ -94,6 +94,7 @@ INSTALLED_APPS = [
     "services",
     "notifications",
     "django_q",
+    "rest_framework_simplejwt.token_blacklist"
 ]
 
 MIDDLEWARE = [

@@ -1,7 +1,9 @@
 from django.contrib.auth import get_user_model
 from rest_framework import status, generics
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -71,3 +73,20 @@ class CustomTokenViewBaseForRefresh(generics.GenericAPIView):
             {"access_token": access_token},
             status=status.HTTP_200_OK
         )
+
+
+class LogoutView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+
+        try:
+            refresh_token = request.COOKIES.get("refresh_token", None)
+            token = RefreshToken(refresh_token)
+            print(token.access_token)
+            token.blacklist()
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)

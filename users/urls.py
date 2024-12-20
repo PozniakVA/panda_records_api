@@ -2,7 +2,8 @@ from django.urls import path
 
 from users.views import (
     CustomTokenObtainPairView,
-    CustomTokenViewBaseForRefresh
+    CustomTokenViewBaseForRefresh,
+    LogoutView
 )
 
 urlpatterns = [
@@ -12,6 +13,7 @@ urlpatterns = [
         CustomTokenViewBaseForRefresh.as_view(),
         name="token_refresh"
     ),
+    path("logout/", LogoutView.as_view(), name="logout"),
 ]
 
 app_name = "users"
