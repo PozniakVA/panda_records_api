@@ -83,7 +83,6 @@ class LogoutView(APIView):
         try:
             refresh_token = request.COOKIES.get("refresh_token", None)
             token = RefreshToken(refresh_token)
-            print(token.access_token)
             token.blacklist()
 
         except Exception as e:
