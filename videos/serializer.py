@@ -11,5 +11,6 @@ class VideoSerializer(serializers.ModelSerializer):
             "title",
             "description_block1",
             "description_block2",
+            "poster",
             "video_file"
         ]
