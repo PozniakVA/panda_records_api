@@ -1,7 +1,7 @@
 import pathlib
 import uuid
 
-
+import cloudinary.uploader
 from cloudinary_storage.storage import MediaCloudinaryStorage
 from django.db import models
 from django.utils.text import slugify
@@ -39,7 +39,23 @@ class Song(models.Model):
         null=True,
         blank=True,
     )
+    duration = models.PositiveIntegerField(null=True, blank=True)
     top = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if not self.duration:
+
+            response = cloudinary.uploader.upload(
+                self.audio_file,
+                resource_type="video"
+            )
+
+            duration = response.get("duration")
+            self.duration = duration
+
+            super().save(update_fields=["duration"])
 
     def __str__(self) -> str:
         return self.title
