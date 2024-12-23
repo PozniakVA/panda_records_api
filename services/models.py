@@ -18,6 +18,9 @@ class Service(models.Model):
     title = models.CharField(max_length=250)
     details_block1 = models.TextField(blank=True, null=True)
     details_block2 = models.TextField(blank=True, null=True)
+    details_block3 = models.TextField(blank=True, null=True)
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+    hourly = models.BooleanField(blank=True, null=True)
     photo = models.ImageField(
         upload_to=photo_path,
         storage=MediaCloudinaryStorage(),

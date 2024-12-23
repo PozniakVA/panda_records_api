@@ -11,5 +11,8 @@ class ServiceSerializer(serializers.ModelSerializer):
             "title",
             "details_block1",
             "details_block2",
+            "details_block3",
+            "price",
+            "hourly",
             "photo"
         ]
