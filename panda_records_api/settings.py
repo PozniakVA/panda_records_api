@@ -33,7 +33,7 @@ PROJECT_MODE = os.getenv("PROJECT_MODE")
 if PROJECT_MODE == "develop":
 
     DEBUG = True
-
+    PASSWORD_RESET_URL = "http://localhost:8000/api/users/password_reset"
     ALLOWED_HOSTS.append("localhost")
 
     DATABASES = {
@@ -46,8 +46,8 @@ if PROJECT_MODE == "develop":
 elif PROJECT_MODE == "production":
 
     DEBUG = False
-
-    DOMAIN = os.environ.get("DOMAIN")
+    PASSWORD_RESET_URL = os.getenv("PASSWORD_RESET_URL")
+    DOMAIN = os.getenv("DOMAIN")
     if DOMAIN:
         ALLOWED_HOSTS.append(DOMAIN)
 
@@ -71,6 +71,12 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     os.getenv("FRONTED_URL"),
 ]
+
+EMAIL_BACKEND = os.getenv("EMAIL_BACKEND")
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
 
 # Application definition
 

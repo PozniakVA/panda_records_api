@@ -3,7 +3,7 @@ from django.urls import path
 from users.views import (
     CustomTokenObtainPairView,
     CustomTokenViewBaseForRefresh,
-    LogoutView
+    LogoutView, ResetPassword, RequestPasswordReset
 )
 
 urlpatterns = [
@@ -14,6 +14,8 @@ urlpatterns = [
         name="token_refresh"
     ),
     path("logout/", LogoutView.as_view(), name="logout"),
+    path("forgot_password/", RequestPasswordReset.as_view(), name="forgot_password"),
+    path("password_reset/<str:token>/", ResetPassword.as_view(), name="password_reset"),
 ]
 
 app_name = "users"

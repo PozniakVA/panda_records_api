@@ -75,3 +75,9 @@ class User(AbstractUser):
             token = token_urlsafe(10)
             if not User.objects.filter(token=token).exists():
                 return token
+
+
+class PasswordReset(models.Model):
+    email = models.EmailField()
+    token = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
