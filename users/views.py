@@ -1,8 +1,9 @@
 import os
+import smtplib
+from email.mime.text import MIMEText
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from rest_framework import status, generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -117,19 +118,32 @@ class RequestPasswordReset(generics.GenericAPIView):
 
             reset_url = f"{settings.PASSWORD_RESET_URL}/{token}"
 
-            subject = "Зміна пароля"
-            context = {
-                "user": user,
-                "reset_url": reset_url,
-            }
-            message = render_to_string("emails/password_reset.html", context)
-            email_message = EmailMessage(subject, message, to=[email])
-            email_message.content_subtype = "html"
+            sender = os.getenv("EMAIL_SENDER")
+            password = os.getenv("EMAIL_APP_PASSWORD_SENDER")
 
-            # Send the email
-            email_message.send()
+            server = smtplib.SMTP("smtp.gmail.com", 587)
+            server.starttls()
 
-            return Response({"success": "We have sent you a link to reset your password"}, status=status.HTTP_200_OK)
+            try:
+                template = render_to_string("emails/password_reset.html", {"reset_url": reset_url})
+            except IOError:
+                return "The template file does not found!"
+
+            try:
+                server.login(sender, password)
+                msg = MIMEText(template, "html")
+                msg["Subject"] = "Зміна парооля"
+                server.sendmail(sender, email, msg.as_string())
+                return Response(
+                    {"success": "We have sent you a link to reset your password"},
+                    status=status.HTTP_200_OK
+                )
+            except Exception as e:
+                return Response(
+                    f"{e} Check your login or password!",
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
         else:
             return Response({"error": "User with credentials not found"}, status=status.HTTP_404_NOT_FOUND)
 

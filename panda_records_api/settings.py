@@ -72,11 +72,9 @@ CORS_ALLOWED_ORIGINS = [
     os.getenv("FRONTED_URL"),
 ]
 
-EMAIL_BACKEND = os.getenv("EMAIL_BACKEND")
-EMAIL_HOST = os.getenv("EMAIL_HOST")
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_SENDER = os.getenv("EMAIL_SENDER")
+EMAIL_PASSWORD_SENDER = os.getenv("EMAIL_PASSWORD")
+
 
 # Application definition
 
