@@ -98,7 +98,9 @@ class LogoutView(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
+        response = Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
+        # response.delete_cookie("refresh_token")
+        return response
 
 
 class RequestPasswordReset(generics.GenericAPIView):
