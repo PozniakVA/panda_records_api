@@ -22,7 +22,7 @@ class IsAdminUserOrCreateOnly(BasePermission):
         if request.method == "POST":
             return True
 
-        if request.method in SAFE_METHODS or request.method == "DELETE":
+        if request.method in SAFE_METHODS or request.method in ["DELETE", "PATCH"]:
             return request.user.is_staff
 
         return False

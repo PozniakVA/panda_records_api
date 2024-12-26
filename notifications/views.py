@@ -1,20 +1,13 @@
 from django_q.tasks import async_task
-from rest_framework import mixins, status
+from rest_framework import status, viewsets
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet
 
 from notifications.models import Notification
 from notifications.serializer import NotificationSerializer, NotificationCreateSerializer
 from panda_records_api.permissions import IsAdminUserOrCreateOnly
 
 
-class NotificationView(
-    mixins.CreateModelMixin,
-    mixins.RetrieveModelMixin,
-    mixins.DestroyModelMixin,
-    mixins.ListModelMixin,
-    GenericViewSet
-):
+class NotificationView(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     permission_classes = [IsAdminUserOrCreateOnly]
 
