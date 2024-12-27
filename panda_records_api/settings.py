@@ -89,6 +89,7 @@ INSTALLED_APPS = [
     "cloudinary_storage",
     "cloudinary",
     "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",
     "rest_framework_simplejwt",
     "corsheaders",
     "users",
@@ -98,7 +99,6 @@ INSTALLED_APPS = [
     "services",
     "notifications",
     "django_q",
-    "rest_framework_simplejwt.token_blacklist"
 ]
 
 MIDDLEWARE = [
