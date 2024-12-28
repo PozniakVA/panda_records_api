@@ -99,6 +99,7 @@ INSTALLED_APPS = [
     "services",
     "notifications",
     "django_q",
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -197,7 +198,8 @@ AUTH_USER_MODEL = "users.User"
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-    )
+    ),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 SIMPLE_JWT = {
@@ -227,4 +229,16 @@ Q_CLUSTER = {
         "port": os.getenv("REDIS_PORT"),
         "password": os.getenv("REDIS_PASSWORD"),
     }
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Panda Records API",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "defaultModelRendering": "model",
+        "defaultModelsExpandDepth": 2,
+        "defaultModelExpandDepth": 2,
+    },
 }
