@@ -153,7 +153,7 @@ class RequestPasswordReset(generics.GenericAPIView):
 
 class ResetPassword(generics.GenericAPIView):
     serializer_class = ResetPasswordSerializer
-    permission_classes = []
+    permission_classes = [AllowAny]
 
     def post(self, request, token):
         serializer = self.serializer_class(data=request.data)

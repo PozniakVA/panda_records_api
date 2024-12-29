@@ -32,7 +32,7 @@ ALLOWED_HOSTS = ["0.0.0.0"]
 PROJECT_MODE = os.getenv("PROJECT_MODE")
 if PROJECT_MODE == "develop":
 
-    DEBUG = True
+    DEBUG = False
     PASSWORD_RESET_URL = "http://localhost:8000/api/users/password_reset"
     ALLOWED_HOSTS.append("localhost")
 

@@ -11,11 +11,11 @@ urlpatterns = [
     path(
         "refresh/",
         CustomTokenViewBaseForRefresh.as_view(),
-        name="token_refresh"
+        name="token-refresh"
     ),
     path("logout/", LogoutView.as_view(), name="logout"),
-    path("forgot_password/", RequestPasswordReset.as_view(), name="forgot_password"),
-    path("password_reset/<str:token>/", ResetPassword.as_view(), name="password_reset"),
+    path("password-reset/", RequestPasswordReset.as_view(), name="password-reset"),
+    path("password-reset/<str:token>/", ResetPassword.as_view(), name="password-reset-with-token"),
 ]
 
 app_name = "users"
