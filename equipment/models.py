@@ -31,4 +31,4 @@ class Equipment(models.Model):
     )
 
     def __str__(self) -> str:
-        return self.model
+        return self.name
