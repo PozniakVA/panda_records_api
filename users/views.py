@@ -12,7 +12,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework_simplejwt.settings import api_settings
-from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenViewBase
 
@@ -69,14 +68,14 @@ class CustomTokenViewBaseForRefresh(generics.GenericAPIView):
         refresh_token = request.COOKIES.get("refresh_token")
         if not refresh_token:
             return Response(
-                {"error": "You do not have a refresh token"},
+                {"detail": "You do not have a refresh token"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         try:
             token = RefreshToken(refresh_token)
         except TokenError as e:
-            raise InvalidToken({"error": f"Invalid refresh token: {e}"})
+            raise InvalidToken({"detail": f"Invalid refresh token: {e}"})
 
         access_token = str(token.access_token)
 
@@ -97,9 +96,9 @@ class LogoutView(APIView):
             token.blacklist()
 
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-        response = Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
+        response = Response({"detail": "Successfully logged out"}, status=status.HTTP_200_OK)
         response.delete_cookie("refresh_token")
         return response
 
@@ -138,7 +137,7 @@ class RequestPasswordReset(generics.GenericAPIView):
                 msg["Subject"] = "Зміна парооля"
                 server.sendmail(sender, email, msg.as_string())
                 return Response(
-                    {"success": "We have sent you a link to reset your password"},
+                    {"detail": "We have sent you a link to reset your password"},
                     status=status.HTTP_200_OK
                 )
             except Exception as e:
@@ -148,7 +147,7 @@ class RequestPasswordReset(generics.GenericAPIView):
                 )
 
         else:
-            return Response({"error": "User with credentials not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"detail": "User with credentials not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class ResetPassword(generics.GenericAPIView):
@@ -162,7 +161,7 @@ class ResetPassword(generics.GenericAPIView):
         reset_obj = PasswordReset.objects.filter(token=token).first()
 
         if not reset_obj:
-            return Response({"error": "Invalid token"}, status=400)
+            return Response({"detail": "Invalid token"}, status=400)
 
         user = User.objects.filter(email=reset_obj.email).first()
 
@@ -172,6 +171,6 @@ class ResetPassword(generics.GenericAPIView):
 
             reset_obj.delete()
 
-            return Response({"success": "Password updated"})
+            return Response({"detail": "Password updated"})
         else:
-            return Response({"error": "No user found"}, status=404)
+            return Response({"detail": "No user found"}, status=404)
