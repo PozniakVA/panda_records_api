@@ -1,4 +1,6 @@
 from django_q.tasks import async_task
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 
@@ -7,6 +9,15 @@ from notifications.serializer import NotificationSerializer, NotificationCreateS
 from panda_records_api.permissions import IsAdminUserOrCreateOnly
 
 
+@extend_schema(
+    parameters=[
+        OpenApiParameter(
+            "status",
+            type=OpenApiTypes.STR,
+            description="Filter by status (ex. ?status=pending)",
+        )
+    ]
+)
 class NotificationView(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     permission_classes = [IsAdminUserOrCreateOnly]
