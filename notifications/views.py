@@ -14,9 +14,9 @@ class NotificationView(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = self.queryset
 
-        status = self.request.query_params.get("status")
-        if status:
-            queryset = queryset.filter(status=status)
+        status_parameter = self.request.query_params.get("status")
+        if status_parameter:
+            queryset = queryset.filter(status=status_parameter)
 
         return queryset.order_by("-created_at")
 
