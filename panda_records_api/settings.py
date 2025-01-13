@@ -45,7 +45,7 @@ if PROJECT_MODE == "develop":
 
 elif PROJECT_MODE == "production":
 
-    DEBUG = False
+    DEBUG = True
     PASSWORD_RESET_URL = os.getenv("PASSWORD_RESET_URL")
     DOMAIN = os.getenv("DOMAIN")
     if DOMAIN:
@@ -69,8 +69,12 @@ else:
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    os.getenv("FRONTED_URL"),
+    os.getenv("FRONTED_URL")
 ]
+
+TEST_FRONTED_URL = os.getenv("TEST_FRONTED_URL")
+if TEST_FRONTED_URL:
+    CORS_ALLOWED_ORIGINS.append(TEST_FRONTED_URL)
 
 EMAIL_SENDER = os.getenv("EMAIL_SENDER")
 EMAIL_PASSWORD_SENDER = os.getenv("EMAIL_PASSWORD")
