@@ -32,7 +32,7 @@ ALLOWED_HOSTS = ["0.0.0.0"]
 PROJECT_MODE = os.getenv("PROJECT_MODE")
 if PROJECT_MODE == "develop":
 
-    DEBUG = False
+    DEBUG = True
     PASSWORD_RESET_URL = "http://localhost:8000/api/users/password_reset"
     ALLOWED_HOSTS.append("localhost")
 
@@ -43,9 +43,15 @@ if PROJECT_MODE == "develop":
         }
     }
 
-elif PROJECT_MODE == "production":
+elif PROJECT_MODE in ["production", "test_production_on_localhost"]:
 
-    DEBUG = True
+    if PROJECT_MODE == "production":
+        DEBUG = False
+
+    elif PROJECT_MODE == "test_production_on_localhost":
+        DEBUG = True
+        ALLOWED_HOSTS.append("localhost")
+
     PASSWORD_RESET_URL = os.getenv("PASSWORD_RESET_URL")
     DOMAIN = os.getenv("DOMAIN")
     if DOMAIN:
@@ -63,7 +69,7 @@ elif PROJECT_MODE == "production":
     }
 
 else:
-    raise ValueError("PROJECT_MODE must be set to 'develop' or 'production'")
+    raise ValueError("PROJECT_MODE must be set to 'develop', 'production', or 'test_production_on_localhost'")
 
 
 CORS_ALLOW_CREDENTIALS = True
