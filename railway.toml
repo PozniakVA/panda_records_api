@@ -1,2 +1,2 @@
 [deploy]
-startCommand = "gunicorn panda_records_api.wsgi:application --bind 0.0.0.0:$PORT & python manage.py custom_qcluster & python manage.py launch_telegram_bot"
+startCommand = "python manage.py collectstatic --noinput && gunicorn panda_records_api.wsgi:application --bind 0.0.0.0:$PORT & python manage.py custom_qcluster & python manage.py launch_telegram_bot"
