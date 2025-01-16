@@ -27,14 +27,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-ALLOWED_HOSTS = ["0.0.0.0"]
+ALLOWED_HOSTS = []
 
 PROJECT_MODE = os.getenv("PROJECT_MODE")
 if PROJECT_MODE == "develop":
 
     DEBUG = True
     PASSWORD_RESET_URL = "http://localhost:8000/api/users/password_reset"
-    EMAIL_CHANGE_URL = "http://localhost:8000"
+    EMAIL_CHANGE_URL = "http://localhost:8000/api/users/confirm-change-email/"
     ALLOWED_HOSTS.append("localhost")
 
     DATABASES = {

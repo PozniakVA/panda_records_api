@@ -209,7 +209,7 @@ class RequestChangeEmail(generics.GenericAPIView):
             new_email = serializer.validated_data["new_email"]
             encoded_email = urlsafe_base64_encode(str(new_email).encode())
 
-            change_url = f"http://localhost:8000/api/users/confirm-change-email/{uid}/{token}/{encoded_email}/"
+            change_url = f"{settings.EMAIL_CHANGE_URL}/{uid}/{token}/{encoded_email}/"
 
             sender = os.getenv("EMAIL_SENDER")
             password = os.getenv("EMAIL_APP_PASSWORD_SENDER")
