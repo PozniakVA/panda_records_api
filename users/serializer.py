@@ -46,17 +46,11 @@ class ChangeEmailRequestSerializer(serializers.Serializer):
         return value
 
 
-class UserSerializer(serializers.ModelSerializer):
+class ChangePasswordSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
 
-        fields = [
-            "id",
-            "email",
-            "password",
-            "is_staff",
-        ]
-        read_only_fields = ["id", "is_staff"]
+        fields = ["password"]
         extra_kwargs = {
             "password": {
                 "write_only": True,
@@ -65,10 +59,10 @@ class UserSerializer(serializers.ModelSerializer):
             }
         }
 
-        def update(self, instance, validated_data):
-            password = validated_data.pop("password", None)
-            user = super().update(instance, validated_data)
-            if password:
-                user.set_password(password)
-                user.save()
-            return user
+    def update(self, instance, validated_data):
+        password = validated_data.pop("password", None)
+        user = super().update(instance, validated_data)
+        if password:
+            user.set_password(password)
+            user.save()
+        return user

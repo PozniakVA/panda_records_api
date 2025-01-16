@@ -21,7 +21,7 @@ from users.models import User, PasswordReset
 from users.serializer import (
     ResetPasswordRequestSerializer,
     ResetPasswordSerializer,
-    UserSerializer,
+    ChangePasswordSerializer,
     ChangeEmailRequestSerializer
 )
 
@@ -178,11 +178,18 @@ class ResetPassword(generics.GenericAPIView):
             return Response({"detail": "No user found"}, status=404)
 
 
-class ManageUserView(generics.RetrieveUpdateAPIView):
-    serializer_class = UserSerializer
+class ChangePasswordView(generics.UpdateAPIView):
+    serializer_class = ChangePasswordSerializer
 
     def get_object(self):
         return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        return Response(
+            {"detail": "Password updated successfully."},
+            status=status.HTTP_200_OK,
+        )
 
 
 class RequestChangeEmail(generics.GenericAPIView):
