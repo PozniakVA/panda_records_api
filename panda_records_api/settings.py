@@ -34,6 +34,7 @@ if PROJECT_MODE == "develop":
 
     DEBUG = True
     PASSWORD_RESET_URL = "http://localhost:8000/api/users/password_reset"
+    EMAIL_CHANGE_URL = "http://localhost:8000"
     ALLOWED_HOSTS.append("localhost")
 
     DATABASES = {
@@ -52,6 +53,7 @@ elif PROJECT_MODE in ["production", "test_production_on_localhost"]:
         DEBUG = True
         ALLOWED_HOSTS.append("localhost")
 
+    EMAIL_CHANGE_URL = os.getenv("EMAIL_CHANGE_URL")
     PASSWORD_RESET_URL = os.getenv("PASSWORD_RESET_URL")
     DOMAIN = os.getenv("DOMAIN")
     if DOMAIN:
@@ -114,6 +116,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -185,7 +188,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "../../staticfiles")
+STATICFILES_DIRS = (BASE_DIR / "static",)
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/panda_records_api/media/"
 

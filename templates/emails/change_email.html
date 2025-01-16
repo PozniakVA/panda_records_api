@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+  <head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Зміна електронної пошти</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  </head>
+  
+  <body>
+    <div class="email-container">
+      <h1>Шановний користувачу!</h1>
+      <p>Ви подали запит на зміну електронної пошти. Щоб завершити процес, натисніть кнопку нижче:</p>
+      <a href="{{ change_url }}">Змінити електронну пошту</a>
+    </div>
+  </body>
+</html>
