@@ -34,7 +34,7 @@ def delete_old_file_on_update(sender, instance, **kwargs):
         return
 
     new_poster = instance.poster
-    if not old_poster == new_poster:
+    if old_poster and not old_poster == new_poster:
 
         old_poster_url = old_poster.url
         public_id = old_poster_url.split("/v1/")[1]
@@ -42,7 +42,7 @@ def delete_old_file_on_update(sender, instance, **kwargs):
         destroy(public_id)
 
     new_video_file = instance.video_file
-    if not old_video_file == new_video_file:
+    if old_video_file and not old_video_file == new_video_file:
         old_video_file_url = old_video_file.url
         public_id = old_video_file_url.split("/v1/")[1]
         destroy(public_id, resource_type="video")

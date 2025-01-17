@@ -25,7 +25,7 @@ def delete_old_file_on_update(sender, instance, **kwargs):
         return
 
     new_file = instance.photo
-    if not old_photo == new_file:
+    if old_photo and not old_photo == new_file:
 
         old_photo_url = old_photo.url
         public_id = old_photo_url.split("/v1/")[1]
