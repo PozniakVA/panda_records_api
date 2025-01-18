@@ -237,7 +237,7 @@ class RequestChangeEmail(generics.GenericAPIView):
 
 
 class ConfirmChangeEmail(APIView):
-    def get(self, request, uid_b64, token, encoded_email_b64):
+    def post(self, request, uid_b64, token, encoded_email_b64):
 
         try:
             uid = urlsafe_base64_decode(uid_b64).decode()

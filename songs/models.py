@@ -45,7 +45,7 @@ class Song(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
-        if not self.duration:
+        if self.audio_file and not self.duration:
 
             response = cloudinary.uploader.upload(
                 self.audio_file,
