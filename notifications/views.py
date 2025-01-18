@@ -19,11 +19,10 @@ from panda_records_api.permissions import IsAdminUserOrCreateOnly
     ]
 )
 class NotificationView(viewsets.ModelViewSet):
-    queryset = Notification.objects.all()
     permission_classes = [IsAdminUserOrCreateOnly]
 
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = Notification.objects.all()
 
         status_parameter = self.request.query_params.get("status")
         if status_parameter:

@@ -6,12 +6,11 @@ from songs.serializer import SongSerializer
 
 
 class SongViewSet(viewsets.ModelViewSet):
-    queryset = Song.objects.all()
     permission_classes = [IsAdminUserOrReadOnly]
     serializer_class = SongSerializer
 
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = Song.objects.all()
         top = self.request.query_params.get("top")
 
         option = {"true": True, "false": False}
