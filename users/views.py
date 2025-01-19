@@ -4,6 +4,7 @@ from email.mime.text import MIMEText
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import PasswordResetTokenGenerator, default_token_generator
+from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from rest_framework import status, generics
@@ -249,9 +250,9 @@ class ConfirmChangeEmail(APIView):
                 user.email = new_email
                 user.save()
 
-                return Response({"detail": "Email successfully changed!"}, status=status.HTTP_200_OK)
+                return HttpResponseRedirect(settings.EMAIL_CHANGE_SUCCESS_URL)
 
-            return Response({"detail": "Invalid link or token."}, status=status.HTTP_400_BAD_REQUEST)
+            return HttpResponseRedirect(settings.EMAIL_CHANGE_FAIL_URL)
 
         except Exception as e:
             return Response({"detail": f"Error: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)

@@ -35,6 +35,8 @@ if PROJECT_MODE == "develop":
     DEBUG = True
     PASSWORD_RESET_URL = "http://localhost:8000/api/users/password_reset"
     EMAIL_CHANGE_URL = "http://localhost:8000/api/users/confirm-change-email/"
+    EMAIL_CHANGE_SUCCESS_URL = "http://localhost:8000/api/users/login/"
+    EMAIL_CHANGE_FAIL_URL = "http://localhost:8000/"
     ALLOWED_HOSTS.append("localhost")
 
     DATABASES = {
@@ -53,8 +55,11 @@ elif PROJECT_MODE in ["production", "test_production_on_localhost"]:
         DEBUG = True
         ALLOWED_HOSTS.append("localhost")
 
-    EMAIL_CHANGE_URL = os.getenv("EMAIL_CHANGE_URL")
     PASSWORD_RESET_URL = os.getenv("PASSWORD_RESET_URL")
+    EMAIL_CHANGE_URL = os.getenv("EMAIL_CHANGE_URL")
+    EMAIL_CHANGE_SUCCESS_URL = os.getenv("EMAIL_CHANGE_SUCCESS_URL")
+    EMAIL_CHANGE_FAIL_URL = os.getenv("EMAIL_CHANGE_FAIL_URL")
+
     DOMAIN = os.getenv("DOMAIN")
     if DOMAIN:
         ALLOWED_HOSTS.append(DOMAIN)

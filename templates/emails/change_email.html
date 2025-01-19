@@ -31,28 +31,33 @@
       .email-container p {
         line-height: 1.6;
       }
-      .email-container a {
-        display: inline-block;
+      .email-container form {
         margin-top: 20px;
+      }
+      .email-container button {
         padding: 10px 20px;
         background-color: #4CAF50;
         color: #ffffff;
-        text-decoration: none;
         font-weight: bold;
+        border: none;
         border-radius: 5px;
+        cursor: pointer;
         transition: background-color 0.3s ease;
       }
-      .email-container a:hover {
+      .email-container button:hover {
         background-color: #45a049;
       }
     </style>
   </head>
-  
+
   <body>
     <div class="email-container">
       <h1>Шановний користувачу!</h1>
       <p>Ви подали запит на зміну електронної пошти. Щоб завершити процес, натисніть кнопку нижче:</p>
-      <a href="{{ change_url }}">Змінити електронну пошту</a>
+      <form action="{{ change_url }}" method="POST">
+        <button type="submit">Змінити електронну пошту</button>
+      </form>
     </div>
   </body>
+
 </html>

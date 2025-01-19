@@ -81,4 +81,5 @@ uritemplate==4.1.1
 urllib3==2.2.3
 uvicorn==0.32.1
 wcwidth==0.2.13
+wheel==0.45.1
 whitenoise==6.8.2
