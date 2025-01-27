@@ -15,5 +15,5 @@ def setup_schedule() -> None:
             func="users.tasks.blacklist_cleanup",
             schedule_type=Schedule.MONTHLY,
             repeats=-1,
-            name="Weekly Blacklist Cleanup",
+            name="Monthly Blacklist Cleanup",
         )

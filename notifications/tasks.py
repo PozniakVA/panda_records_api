@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 from django.contrib.auth import get_user_model
@@ -23,10 +24,12 @@ def send_welcome_message(message):
 def connect_telegram_user_with_user_from_db(message):
 
     markup = types.InlineKeyboardMarkup()
-    markup.add(types.InlineKeyboardButton("Сторінка адміністратора",
-                                          # url=f"https://{os.getenv("DOMAIN")}/api/admin/"
-                                          url="https://pandarecordsapi-production.up.railway.app/api/songs/"
-                                          ))
+    markup.add(
+        types.InlineKeyboardButton(
+            "Сторінка адміністратора",
+            url=f"https://{os.getenv("DOMAIN")}/api/admin/"
+        )
+    )
 
     text = message.text.split()
     if len(text) > 1:
