@@ -1,10 +1,3 @@
-"# panda_records_api" 
-In Django, you can remove the database structure using the flush command, which removes all data from the database and resets the structure to the state it was in when you first ran migrate. Here's how to do it:
-python manage.py flush
-
-python manage.py custom_qcluster
-
-
 # Email Sending Setup Guide
 
 To be able to send emails to users from your application, you need to create an app password for your Google account. Follow these steps:
@@ -28,3 +21,16 @@ To be able to send emails to users from your application, you need to create an 
 ```env
 EMAIL_SENDER=your_email@gmail.com
 EMAIL_APP_PASSWORD_SENDER=your_app_password
+```
+
+## Commands
+
+### 1. Start Custom Q-Cluster
+```
+python manage.py custom_qcluster
+```
+### 2. Start Telegram Bot
+If you want to interact with messages and the server via Telegram, use this command to start the bot:
+```
+python manage.py launch_telegram_bot
+```

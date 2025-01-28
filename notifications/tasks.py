@@ -80,9 +80,10 @@ def send_notification_to_admin_about_client(notification):
         title = "✅ Виконано ✅"
 
     for chat in chats:
-        bot.send_message(
-            chat.chat_id,
-            f"""
+        try:
+            bot.send_message(
+                chat.chat_id,
+                f"""
 {title}
 
 ID: {notification["id"]}
@@ -97,8 +98,9 @@ Email ➪ {notification["email"]}
 ⬇️ Повідомлення ⬇️
 {notification["message"]}
 """, reply_markup=markup
-        )
-
+            )
+        except Exception as e:
+            print(f"Failed to send the message to the chat {chat.chat_id}: {e}")
 
 def stop_notifications(message):
     chat = Chat.objects.get(chat_id=message.chat.id)
