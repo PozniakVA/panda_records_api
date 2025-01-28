@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from rest_framework import status
@@ -22,13 +24,17 @@ class NotificationsUnauthenticatedUserTestCase(TestCase):
         }
         self.notification = Notification.objects.create(**self.data)
 
-    def test_unauthenticated_user_can_create_data(self) -> None:
+    @patch("notifications.views.NotificationView._send_notification")
+    def test_unauthenticated_user_can_create_data(self, mock_send_notification) -> None:
 
         """Test method POST"""
 
         response = self.client.post(self.url_list, self.data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertTrue(Notification.objects.filter(name=self.data["name"]).exists())
+        self.assertTrue(
+            Notification.objects.filter(name=self.data["name"]).exists()
+        )
+        mock_send_notification.assert_called_once()
 
     def test_unauthenticated_user_cannot_get_data(self) -> None:
 
@@ -42,21 +48,32 @@ class NotificationsUnauthenticatedUserTestCase(TestCase):
         """Test method PATCH"""
 
         response = self.client.patch(
-            reverse("services:service-detail", kwargs={"pk": self.notification.id}),
+            reverse(
+                "services:service-detail",
+                kwargs={"pk": self.notification.id}
+            ),
             data={"name": "Updated"}
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        self.assertEqual(Notification.objects.get(id=self.notification.id).name, "Levi")
+        self.assertEqual(
+            Notification.objects.get(id=self.notification.id).name,
+            "Levi"
+        )
 
     def test_unauthenticated_user_cannot_delete_data(self) -> None:
 
         """Test method DELETE"""
 
         response = self.client.delete(
-            reverse("services:service-detail", kwargs={"pk": self.notification.id})
+            reverse(
+                "services:service-detail",
+                kwargs={"pk": self.notification.id}
+            )
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        self.assertTrue(Notification.objects.filter(id=self.notification.id).exists())
+        self.assertTrue(
+            Notification.objects.filter(id=self.notification.id).exists()
+        )
 
 
 class NotificationsAdminTestCase(TestCase):
@@ -80,12 +97,16 @@ class NotificationsAdminTestCase(TestCase):
         }
         self.notification = Notification.objects.create(**self.data)
 
-    def test_admin_can_create_data(self) -> None:
+    @patch("notifications.views.NotificationView._send_notification")
+    def test_admin_can_create_data(self, mock_send_notification) -> None:
         """Test method POST"""
 
         response = self.client.post(self.url_list, self.data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertTrue(Notification.objects.filter(name=self.data["name"]).exists())
+        self.assertTrue(
+            Notification.objects.filter(name=self.data["name"]).exists()
+        )
+        mock_send_notification.assert_called_once()
 
     def test_admin_can_get_data(self) -> None:
 

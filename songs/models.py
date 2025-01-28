@@ -29,8 +29,8 @@ class Song(models.Model):
     audio_file = models.FileField(
         upload_to=audio_path,
         max_length=1000,
-        null = True,
-        blank = True,
+        null=True,
+        blank=True,
     )
     photo = models.ImageField(
         upload_to=photo_path,

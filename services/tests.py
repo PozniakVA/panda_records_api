@@ -14,7 +14,10 @@ class ServicesUnauthenticatedUserTestCase(TestCase):
         self.client = APIClient()
 
         self.url_list = reverse("services:service-list")
-        self.service = Service.objects.create(title="Test Service")
+        self.service = Service.objects.create(
+            title="Test Service",
+            price=1
+        )
 
     def test_unauthenticated_user_can_get_data(self) -> None:
 
@@ -30,7 +33,7 @@ class ServicesUnauthenticatedUserTestCase(TestCase):
 
         """Test method POST"""
 
-        data = {"title": "Equipment rental",}
+        data = {"title": "Equipment rental", "price": 1}
 
         response = self.client.post(self.url_list, data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -42,10 +45,13 @@ class ServicesUnauthenticatedUserTestCase(TestCase):
 
         response = self.client.put(
             reverse("services:service-detail", kwargs={"pk": self.service.id}),
-            data={"title": "Updated Service"}
+            data={"title": "Updated Service", "price": 1}
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        self.assertEqual(Service.objects.get(id=self.service.id).title, "Test Service")
+        self.assertEqual(
+            Service.objects.get(id=self.service.id).title,
+            "Test Service"
+        )
 
     def test_unauthenticated_user_cannot_delete_data(self) -> None:
 
@@ -70,7 +76,10 @@ class ServicesEquipmentAdminTestCase(TestCase):
         )
         self.client.force_authenticate(user=self.user)
 
-        self.service = Service.objects.create(title="Test Service")
+        self.service = Service.objects.create(
+            title="Test Service",
+            price=1
+        )
 
     def test_admin_can_create_data(self) -> None:
 
@@ -78,7 +87,7 @@ class ServicesEquipmentAdminTestCase(TestCase):
 
         response = self.client.post(
             reverse("services:service-list"),
-            {"title": "Equipment rental",}
+            {"title": "Equipment rental", "price": 1}
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -92,10 +101,12 @@ class ServicesEquipmentAdminTestCase(TestCase):
 
         response = self.client.put(
             reverse("services:service-detail", kwargs={"pk": self.service.id}),
-            data={"title": "Updated Service"}
+            data={"title": "Updated Service", "price": 1}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(Service.objects.filter(title="Updated Service").exists())
+        self.assertTrue(
+            Service.objects.filter(title="Updated Service").exists()
+        )
 
     def test_admin_can_delete_data(self) -> None:
 
@@ -104,5 +115,8 @@ class ServicesEquipmentAdminTestCase(TestCase):
         response_delete = self.client.delete(
             reverse("services:service-detail", kwargs={"pk": self.service.id})
         )
-        self.assertEqual(response_delete.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(
+            response_delete.status_code,
+            status.HTTP_204_NO_CONTENT
+        )
         self.assertFalse(Service.objects.filter(id=self.service.id).exists())

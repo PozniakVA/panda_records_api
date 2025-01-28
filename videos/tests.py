@@ -30,7 +30,7 @@ class VideoUnauthenticatedUserTestCase(TestCase):
 
         """Test method POST"""
 
-        data = {"title": "Playing the guitar",}
+        data = {"title": "Playing the guitar"}
 
         response = self.client.post(self.url_list, data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -45,7 +45,10 @@ class VideoUnauthenticatedUserTestCase(TestCase):
             data={"title": "Updated Video"}
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        self.assertEqual(Video.objects.get(id=self.video.id).title, "Test Video")
+        self.assertEqual(
+            Video.objects.get(id=self.video.id).title,
+            "Test Video"
+        )
 
     def test_unauthenticated_user_cannot_delete_data(self) -> None:
 
@@ -78,7 +81,7 @@ class VideoEquipmentAdminTestCase(TestCase):
 
         response = self.client.post(
             reverse("videos:video-list"),
-            {"title": "Playing the guitar",}
+            {"title": "Playing the guitar"}
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -104,5 +107,8 @@ class VideoEquipmentAdminTestCase(TestCase):
         response_delete = self.client.delete(
             reverse("videos:video-detail", kwargs={"pk": self.video.id})
         )
-        self.assertEqual(response_delete.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(
+            response_delete.status_code,
+            status.HTTP_204_NO_CONTENT
+        )
         self.assertFalse(Video.objects.filter(id=self.video.id).exists())

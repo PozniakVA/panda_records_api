@@ -42,7 +42,9 @@ class ChangeEmailRequestSerializer(serializers.Serializer):
         User = get_user_model()
 
         if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("Цей email уже використовується.")
+            raise serializers.ValidationError(
+                "Цей email уже використовується."
+            )
         return value
 
 

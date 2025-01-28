@@ -1,7 +1,10 @@
 import pathlib
 import uuid
 
-from cloudinary_storage.storage import VideoMediaCloudinaryStorage, MediaCloudinaryStorage
+from cloudinary_storage.storage import (
+    VideoMediaCloudinaryStorage,
+    MediaCloudinaryStorage
+)
 from django.db import models
 from django.utils.text import slugify
 
@@ -13,6 +16,7 @@ def video_path(instance, filename):
     )
 
     return f"endpoint_video/videos/{filename}"
+
 
 def photo_path(instance, filename):
     filename = (

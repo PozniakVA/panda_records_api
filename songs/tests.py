@@ -104,7 +104,10 @@ class SongsAdminTestCase(TestCase):
         response_delete = self.client.delete(
             reverse("songs:song-detail", kwargs={"pk": self.song.id})
         )
-        self.assertEqual(response_delete.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(
+            response_delete.status_code,
+            status.HTTP_204_NO_CONTENT
+        )
         self.assertFalse(Song.objects.filter(id=self.song.id).exists())
 
 

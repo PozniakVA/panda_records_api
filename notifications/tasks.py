@@ -21,6 +21,7 @@ def send_welcome_message(message):
         """
     )
 
+
 def connect_telegram_user_with_user_from_db(message):
 
     markup = types.InlineKeyboardMarkup()
@@ -40,15 +41,27 @@ def connect_telegram_user_with_user_from_db(message):
         bot.send_message(
             message.chat.id,
             """
-⚠️ Якщо у вас виникли проблеми з отриманням повідомлень, будь ласка, повторно увійдіть до бота, скориставшись посиланням, доступним на сторінці адміністратора
+⚠️ Якщо у вас виникли проблеми з отриманням повідомлень, будь ласка, повторно
+ увійдіть до бота, скориставшись посиланням, доступним на сторінці адміністратора
 """, reply_markup=markup
         )
+
 
 def send_notification_to_admin_about_client(notification):
 
     markup = types.InlineKeyboardMarkup()
-    markup.add(types.InlineKeyboardButton("Позначити як виконане", callback_data="done"))
-    markup.add(types.InlineKeyboardButton("Позначити як в процесі", callback_data="in_process" ))
+    markup.add(
+        types.InlineKeyboardButton(
+            "Позначити як виконане",
+            callback_data="done"
+        )
+    )
+    markup.add(
+        types.InlineKeyboardButton(
+            "Позначити як в процесі",
+            callback_data="in_process"
+        )
+    )
 
     chats = Chat.objects.filter(
         user__is_staff=True,
@@ -86,6 +99,7 @@ Email ➪ {notification["email"]}
 """, reply_markup=markup
         )
 
+
 def stop_notifications(message):
     chat = Chat.objects.get(chat_id=message.chat.id)
     chat.notify_allowed = True
@@ -101,6 +115,7 @@ def stop_notifications(message):
 ➪ /start_notifications
         """
     )
+
 
 def start_notifications(message):
     chat = Chat.objects.get(chat_id=message.chat.id)
@@ -118,30 +133,40 @@ def start_notifications(message):
         """
     )
 
+
 def show_all_commands(message):
     bot.send_message(
         message.chat.id,
         """
-➪ /all_commands, /help  
-📝 Перегляд усіх команд із поясненнями  
+➪ /all_commands, /help
+📝 Перегляд усіх команд із поясненнями
 
-➪ /total_new_notifications  
-📊 Показує кількість нових повідомлень та повідомлень, які обробляються  
+➪ /total_new_notifications
+📊 Показує кількість нових повідомлень та повідомлень, які обробляються
 
-➪ /stop_notifications  
-⛔ Вимкнення сповіщень  
+➪ /stop_notifications
+⛔ Вимкнення сповіщень
 
-➪ /start_notifications  
-🔔 Увімкнення сповіщень  
+➪ /start_notifications
+🔔 Увімкнення сповіщень
 
-➪ /start  
-🚀 Початок роботи з ботом  
+➪ /start
+🚀 Початок роботи з ботом
 """
     )
 
+
 def total_new_notifications(message):
-    new_notifications = len(Notification.objects.filter(status=Notification.NotificationStatus.PENDING))
-    processing_notifications = len(Notification.objects.filter(status=Notification.NotificationStatus.PROCESSING))
+    new_notifications = len(
+        Notification.objects.filter(
+            status=Notification.NotificationStatus.PENDING
+        )
+    )
+    processing_notifications = len(
+        Notification.objects.filter(
+            status=Notification.NotificationStatus.PROCESSING
+        )
+    )
 
     bot.send_message(
         message.chat.id,
@@ -151,5 +176,3 @@ def total_new_notifications(message):
 Кількість повідомлень, які розглядаються ➪ 🔄  {processing_notifications}  🔄
 """
     )
-
-
