@@ -34,28 +34,44 @@ class EquipmentUnauthenticatedUserTestCase(TestCase):
 
         response = self.client.post(self.url_list, data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        self.assertFalse(Equipment.objects.filter(name=data["name"], model=data["model"]).exists())
+        self.assertFalse(
+            Equipment.objects.filter(
+                name=data["name"],
+                model=data["model"]
+            ).exists()
+        )
 
     def test_unauthenticated_user_cannot_update_data(self) -> None:
 
         """Test method PUT"""
 
         response = self.client.put(
-            reverse("equipment:equipment-detail", kwargs={"pk": self.equipment.id}),
+            reverse(
+                "equipment:equipment-detail",
+                kwargs={"pk": self.equipment.id}
+            ),
             data={"name": "Updated Equipment"}
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        self.assertEqual(Equipment.objects.get(id=self.equipment.id).name, "Test Equipment")
+        self.assertEqual(
+            Equipment.objects.get(id=self.equipment.id).name,
+            "Test Equipment"
+        )
 
     def test_unauthenticated_user_cannot_delete_data(self) -> None:
 
         """Test method DELETE"""
 
         response = self.client.delete(
-            reverse("equipment:equipment-detail", kwargs={"pk": self.equipment.id})
+            reverse(
+                "equipment:equipment-detail",
+                kwargs={"pk": self.equipment.id}
+            )
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        self.assertTrue(Equipment.objects.filter(id=self.equipment.id).exists())
+        self.assertTrue(
+            Equipment.objects.filter(id=self.equipment.id).exists()
+        )
 
 
 class EquipmentAdminTestCase(TestCase):
@@ -91,18 +107,31 @@ class EquipmentAdminTestCase(TestCase):
         """Test method PUT"""
 
         response = self.client.put(
-            reverse("equipment:equipment-detail", kwargs={"pk": self.equipment.id}),
+            reverse(
+                "equipment:equipment-detail",
+                kwargs={"pk": self.equipment.id}
+            ),
             data={"name": "Updated Equipment"}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(Equipment.objects.filter(name="Updated Equipment").exists())
+        self.assertTrue(
+            Equipment.objects.filter(name="Updated Equipment").exists()
+        )
 
     def test_admin_can_delete_data(self) -> None:
 
         """Test method DELETE"""
 
         response_delete = self.client.delete(
-            reverse("equipment:equipment-detail", kwargs={"pk": self.equipment.id})
+            reverse(
+                "equipment:equipment-detail",
+                kwargs={"pk": self.equipment.id}
+            )
         )
-        self.assertEqual(response_delete.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertFalse(Equipment.objects.filter(id=self.equipment.id).exists())
+        self.assertEqual(
+            response_delete.status_code,
+            status.HTTP_204_NO_CONTENT
+        )
+        self.assertFalse(
+            Equipment.objects.filter(id=self.equipment.id).exists()
+        )

@@ -29,7 +29,11 @@ urlpatterns = [
         ResetPassword.as_view(),
         name="password-reset-with-token"
     ),
-    path("change-password/", ChangePasswordView.as_view(), name="change-password"),
+    path(
+        "change-password/",
+        ChangePasswordView.as_view(),
+        name="change-password"
+    ),
     path("change-email/", RequestChangeEmail.as_view(), name="change-email"),
     path(
         "confirm-change-email/<str:uid_b64>/<str:token>/<str:encoded_email_b64>/",

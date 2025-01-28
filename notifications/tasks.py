@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 from django.contrib.auth import get_user_model
@@ -20,13 +21,16 @@ def send_welcome_message(message):
         """
     )
 
+
 def connect_telegram_user_with_user_from_db(message):
 
     markup = types.InlineKeyboardMarkup()
-    markup.add(types.InlineKeyboardButton("Сторінка адміністратора",
-                                          # url=f"https://{os.getenv("DOMAIN")}/api/admin/"
-                                          url="https://pandarecordsapi-production.up.railway.app/api/songs/"
-                                          ))
+    markup.add(
+        types.InlineKeyboardButton(
+            "Сторінка адміністратора",
+            url=f"https://{os.getenv("DOMAIN")}/api/admin/"
+        )
+    )
 
     text = message.text.split()
     if len(text) > 1:
@@ -37,15 +41,27 @@ def connect_telegram_user_with_user_from_db(message):
         bot.send_message(
             message.chat.id,
             """
-⚠️ Якщо у вас виникли проблеми з отриманням повідомлень, будь ласка, повторно увійдіть до бота, скориставшись посиланням, доступним на сторінці адміністратора
+⚠️ Якщо у вас виникли проблеми з отриманням повідомлень, будь ласка, повторно
+ увійдіть до бота, скориставшись посиланням, доступним на сторінці адміністратора
 """, reply_markup=markup
         )
+
 
 def send_notification_to_admin_about_client(notification):
 
     markup = types.InlineKeyboardMarkup()
-    markup.add(types.InlineKeyboardButton("Позначити як виконане", callback_data="done"))
-    markup.add(types.InlineKeyboardButton("Позначити як в процесі", callback_data="in_process" ))
+    markup.add(
+        types.InlineKeyboardButton(
+            "Позначити як виконане",
+            callback_data="done"
+        )
+    )
+    markup.add(
+        types.InlineKeyboardButton(
+            "Позначити як в процесі",
+            callback_data="in_process"
+        )
+    )
 
     chats = Chat.objects.filter(
         user__is_staff=True,
@@ -64,9 +80,10 @@ def send_notification_to_admin_about_client(notification):
         title = "✅ Виконано ✅"
 
     for chat in chats:
-        bot.send_message(
-            chat.chat_id,
-            f"""
+        try:
+            bot.send_message(
+                chat.chat_id,
+                f"""
 {title}
 
 ID: {notification["id"]}
@@ -81,7 +98,9 @@ Email ➪ {notification["email"]}
 ⬇️ Повідомлення ⬇️
 {notification["message"]}
 """, reply_markup=markup
-        )
+            )
+        except Exception as e:
+            print(f"Failed to send the message to the chat {chat.chat_id}: {e}")
 
 def stop_notifications(message):
     chat = Chat.objects.get(chat_id=message.chat.id)
@@ -99,6 +118,7 @@ def stop_notifications(message):
         """
     )
 
+
 def start_notifications(message):
     chat = Chat.objects.get(chat_id=message.chat.id)
     chat.notify_allowed = False
@@ -115,30 +135,40 @@ def start_notifications(message):
         """
     )
 
+
 def show_all_commands(message):
     bot.send_message(
         message.chat.id,
         """
-➪ /all_commands, /help  
-📝 Перегляд усіх команд із поясненнями  
+➪ /all_commands, /help
+📝 Перегляд усіх команд із поясненнями
 
-➪ /total_new_notifications  
-📊 Показує кількість нових повідомлень та повідомлень, які обробляються  
+➪ /total_new_notifications
+📊 Показує кількість нових повідомлень та повідомлень, які обробляються
 
-➪ /stop_notifications  
-⛔ Вимкнення сповіщень  
+➪ /stop_notifications
+⛔ Вимкнення сповіщень
 
-➪ /start_notifications  
-🔔 Увімкнення сповіщень  
+➪ /start_notifications
+🔔 Увімкнення сповіщень
 
-➪ /start  
-🚀 Початок роботи з ботом  
+➪ /start
+🚀 Початок роботи з ботом
 """
     )
 
+
 def total_new_notifications(message):
-    new_notifications = len(Notification.objects.filter(status=Notification.NotificationStatus.PENDING))
-    processing_notifications = len(Notification.objects.filter(status=Notification.NotificationStatus.PROCESSING))
+    new_notifications = len(
+        Notification.objects.filter(
+            status=Notification.NotificationStatus.PENDING
+        )
+    )
+    processing_notifications = len(
+        Notification.objects.filter(
+            status=Notification.NotificationStatus.PROCESSING
+        )
+    )
 
     bot.send_message(
         message.chat.id,
@@ -148,5 +178,3 @@ def total_new_notifications(message):
 Кількість повідомлень, які розглядаються ➪ 🔄  {processing_notifications}  🔄
 """
     )
-
-

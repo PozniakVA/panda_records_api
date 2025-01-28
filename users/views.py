@@ -3,7 +3,10 @@ import smtplib
 from email.mime.text import MIMEText
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.tokens import PasswordResetTokenGenerator, default_token_generator
+from django.contrib.auth.tokens import (
+    PasswordResetTokenGenerator,
+    default_token_generator
+)
 from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -44,7 +47,10 @@ class CustomTokenViewBaseForAccess(TokenViewBase):
         user = get_user_model().objects.get(email=email)
 
         response = Response(
-            {"access_token": access_token, "telegram_bot": user.your_telegram_bot},
+            {
+                "access_token": access_token,
+                "telegram_bot": user.your_telegram_bot
+            },
             status=status.HTTP_200_OK
         )
 
@@ -103,9 +109,14 @@ class LogoutView(APIView):
             token.blacklist()
 
         except Exception as e:
-            return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST
+            )
 
-        response = Response({"detail": "Successfully logged out"}, status=status.HTTP_200_OK)
+        response = Response(
+            {"detail": "Successfully logged out"},
+            status=status.HTTP_200_OK
+        )
         response.delete_cookie("refresh_token")
         return response
 
@@ -115,7 +126,7 @@ class RequestPasswordReset(generics.GenericAPIView):
     serializer_class = ResetPasswordRequestSerializer
 
     def post(self, request):
-        serializer = self.serializer_class(data=request.data)
+        self.serializer_class(data=request.data)
         email = request.data["email"]
         user = User.objects.filter(email__iexact=email).first()
 
@@ -133,7 +144,10 @@ class RequestPasswordReset(generics.GenericAPIView):
             server = smtplib.SMTP("smtp.gmail.com", 587)
             server.starttls()
 
-            template = render_to_string("emails/password_reset.html", {"reset_url": reset_url})
+            template = render_to_string(
+                "emails/password_reset.html",
+                {"reset_url": reset_url}
+            )
 
             try:
                 server.login(sender, password)
@@ -150,7 +164,10 @@ class RequestPasswordReset(generics.GenericAPIView):
                 )
 
         else:
-            return Response({"detail": "User with credentials not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"detail": "User with credentials not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class ResetPassword(generics.GenericAPIView):
@@ -186,7 +203,7 @@ class ChangePasswordView(generics.UpdateAPIView):
         return self.request.user
 
     def update(self, request, *args, **kwargs):
-        response = super().update(request, *args, **kwargs)
+        super().update(request, *args, **kwargs)
         return Response(
             {"detail": "Password updated successfully."},
             status=status.HTTP_200_OK,
@@ -218,7 +235,10 @@ class RequestChangeEmail(generics.GenericAPIView):
             server = smtplib.SMTP("smtp.gmail.com", 587)
             server.starttls()
 
-            template = render_to_string("emails/change_email.html", {"change_url": change_url})
+            template = render_to_string(
+                "emails/change_email.html",
+                {"change_url": change_url}
+            )
 
             try:
                 server.login(sender, password)
@@ -255,4 +275,7 @@ class ConfirmChangeEmail(APIView):
             return HttpResponseRedirect(settings.EMAIL_CHANGE_FAIL_URL)
 
         except Exception as e:
-            return Response({"detail": f"Error: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": f"Error: {str(e)}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
