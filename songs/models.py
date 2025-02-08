@@ -3,7 +3,7 @@ import uuid
 
 import cloudinary.uploader
 from cloudinary_storage.storage import MediaCloudinaryStorage
-from django.db import models
+from django.db import models, transaction
 from django.utils.text import slugify
 
 
@@ -42,6 +42,7 @@ class Song(models.Model):
     duration = models.PositiveIntegerField(null=True, blank=True)
     top = models.BooleanField(default=False)
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
